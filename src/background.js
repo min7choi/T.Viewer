@@ -10,7 +10,7 @@ import LogService from './LogService'
 import SdbManager from './SdbManager'
 import template from './menuTemplate'
 
-import autoUpdater from 'electron-updater'
+import { autoUpdater } from 'electron-updater'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
