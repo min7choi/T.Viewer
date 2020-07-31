@@ -12,7 +12,61 @@
     <noscript>
       <strong>We're sorry but tviewer doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
-    <div id="app"></div>
+    
+    <h1>Hello World</h1>
+    <div id="main">
+      <h1>hi!!!!!!!!!!!</h1>
+      <h2 id="version"></h2>
+
+
+      <div id="notification" class="hidden">
+        <p id="message"></p>
+        <button id="close-button" onClick="closeNotification()">
+          close
+        </button>
+        <button id="restart-button" onClick="restartApp()" class="hidden">
+          restart
+        </button>
+      </div>
+    </div>
+
+    <!-- <div id="app"></div> -->
     <!-- built files will be auto injected -->
+    <script>
+      const { ipcRenderer } = require('electron');
+      const version = document.getElementById('version');
+
+      ipcRenderer.send('app_version');
+      ipcRenderer.on('app_version', (event, arg) => {
+        ipcRenderer.removeAllListeners('app_version');
+        version.innerText = 'Version ' + arg.version;
+      });
+
+      const notification = document.getElementById('notification');
+      const message = document.getElementById('message');
+      const restartButton = document.getElementById('restart-button');
+      
+      ipcRenderer.on('update_available', () => {
+        ipcRenderer.removeAllListeners('update_available');
+        message.innerText = '업데이트 파일을 다운로드 중입니다...';
+        notification.classList.remove('hidden');
+      });
+
+      ipcRenderer.on('update_downloaded', () => {
+        ipcRenderer.removeAllListeners('update_downloaded');
+        message.innerText = '업데이트 파일을 다운로드가 완료되었습니다. 재시작을 하면 업데이트가 시작됩니다. 재시작하시겠습니까?';
+        restartButton.classList.remove('hidden');
+        notification.classList.remove('hidden');
+      });
+
+      function closeNotification() {
+        notification.classList.add('hidden');
+      }
+
+      function restartApp() {
+        ipcRenderer.send('restart_app');
+      }
+
+    </script>
   </body>
 </html>

@@ -10,6 +10,8 @@ import LogService from './LogService'
 import SdbManager from './SdbManager'
 import template from './menuTemplate'
 
+import autoUpdater from 'electron-updater'
+
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -92,6 +94,7 @@ app.on('ready', async () => {
 
     }
     createWindow()
+    autoUpdater.checkForUpdatesAndNotify();
 
     let sdbManager = new SdbManager(spawn);
     let logService = new LogService(ipcMain, sdbManager);
@@ -100,6 +103,22 @@ app.on('ready', async () => {
     sdbManager.registerListener((data)=>{
         logService.sendLogMessage(data);
     });
+})
+
+ipcMain.on('app_version', (event) => {
+    event.sender.send('app_version', { version: app.getVersion() });
+});
+
+autoUpdater.on('update-available', () => {
+    win.webContents.send('update_available');
+});
+
+autoUpdater.on('update-downloaded', () => {
+    win.webContents.send('update_downloaded');
+});
+
+ipcMain.on('restart_app', () => {
+    autoUpdater.quitAndInstall();
 })
 
 // Exit cleanly on request from parent process in development mode.

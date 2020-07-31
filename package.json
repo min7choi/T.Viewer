@@ -15,6 +15,7 @@
   "dependencies": {
     "ace-builds": "^1.4.7",
     "core-js": "^3.1.2",
+    "electron-updater": "^4.3.4",
     "typeface-roboto": "0.0.75",
     "vue": "^2.6.10",
     "vuetify": "^2.1.0"
@@ -27,7 +28,8 @@
     "@vue/cli-service": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-eslint": "^10.0.1",
-    "electron": "^7.2.4",
+    "electron": "^7.3.2",
+    "electron-builder": "^22.8.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "sass": "^1.19.0",
@@ -76,5 +78,9 @@
   "browserslist": [
     "> 1%",
     "last 2 versions"
-  ]
+  ],
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/min7choi/T.Viewer.git"
+  }
 }
